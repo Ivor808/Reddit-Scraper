@@ -1,4 +1,4 @@
-import praw, requests, csv, obo
+import praw, requests, csv
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,14 +32,16 @@ def removestopwords(wordlist, stopwords):
 hot_words = []
 hot_freq = []
 hot_dict = {}
-for submission in hot_sub:
-    if not submission.stickied:
-        words = submission.title.split()
-        hot_words.extend(words)
-        hot_words = removestopwords(hot_words, obo.stopwords)
-        hot_dict = wordlisttofreqdict(hot_words)
-        keylist = [key for key in hot_dict]
-        vallist = [hot_dict[key] for key in hot_dict]
+run = False
+if run = True:
+    for submission in hot_sub:
+        if not submission.stickied:
+            words = submission.title.split()
+            hot_words.extend(words)
+            hot_words = removestopwords(hot_words, obo.stopwords)
+            hot_dict = wordlisttofreqdict(hot_words)
+            keylist = [key for key in hot_dict]
+            vallist = [hot_dict[key] for key in hot_dict]
 
 
 print('done')
