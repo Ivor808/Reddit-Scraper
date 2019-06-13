@@ -1,4 +1,4 @@
-import praw, requests, csv
+import praw, requests, csv,obo
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,7 +10,7 @@ reddit = praw.Reddit(client_id = 'pnJiGPj9YrSycQ',
                      user_agent='wordCloud')
 
 subreddit = reddit.subreddit('politics')
-hot_sub = subreddit.top(limit=500)
+hot_sub = subreddit.top(limit=40)
 
 
 def wordlisttofreqdict(wordlist):
@@ -32,23 +32,24 @@ def removestopwords(wordlist, stopwords):
 hot_words = []
 hot_freq = []
 hot_dict = {}
-run = False
-if run = True:
-    for submission in hot_sub:
-        if not submission.stickied:
-            words = submission.title.split()
-            hot_words.extend(words)
-            hot_words = removestopwords(hot_words, obo.stopwords)
-            hot_dict = wordlisttofreqdict(hot_words)
-            keylist = [key for key in hot_dict]
-            vallist = [hot_dict[key] for key in hot_dict]
+
+for submission in hot_sub:
+    if not submission.stickied:
+        words = submission.title.split()
+        hot_words.extend(words)
+        hot_words = removestopwords(hot_words, obo.stopwords)
+        hot_dict = wordlisttofreqdict(hot_words)
+        keylist = [key for key in hot_dict]
+        vallist = [hot_dict[key] for key in hot_dict]
 
 
 print('done')
 
 df = pd.DataFrame(list(zip(keylist,vallist)), columns= ['word', 'Frequency'])
 df.sort_values(by =['Frequency'], inplace = True, ascending=False)
-df.to_csv('data.csv')
+#df.to_csv('data.csv')
+plt.plot.bar(rot=0)
+
 # TO DO: graph somehow
 # test
 # test2
