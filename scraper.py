@@ -4,15 +4,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 from wordcloud import WordCloud
+import json
+
+
 start_time = time.time()
-reddit = praw.Reddit(client_id = 'pnJiGPj9YrSycQ',
-                     client_secret = 'g8WNac9gNqW3al5nTCPVcIV9SW8',
-                     username ='pyTaste',
-                     password='kailua',
-                     user_agent='wordCloud')
+
+
+def load_json_file(file):
+    with open(file, 'r') as json_file:
+        config_file = json.load(json_file)
+    return config_file
 
 
 def __get_subreddit_object(subreddit_name):
+    config = load_json_file('config.json')
+    reddit = praw.Reddit(client_id=config['clientId'],
+                         client_secret=config['clientSecret'],
+                         username=config['username'],
+                         password=config['password'],
+                         user_agent=config['userAgent'])
     sb = reddit.subreddit(subreddit_name)
     return sb
 
@@ -70,11 +80,9 @@ def top_submission_to_word_cloud(subreddit_name, number_of_submissions):
     wc.to_file('test.png')
 
 
-# top_submission_words_dict = get_top_submissions('leagueoflegends', 500)
-# df = create_dataframe_from_dict(top_submission_words_dict)
-# print(df)
-
 top_submission_to_word_cloud('g', 200)
+
+
 print("--- %s seconds ---" % (time.time() - start_time))
 print('done')
 
@@ -83,6 +91,6 @@ print('done')
 # #df.to_csv('data.csv')
 
 
-# TO DO: graph somehow
-# test
-# test2
+# TO DO:
+# - Graph
+# - Exception handling for non existent subreddit
