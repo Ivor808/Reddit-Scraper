@@ -1,5 +1,4 @@
 import praw
-import obo
 import time
 from wordcloud import WordCloud
 import json
@@ -30,10 +29,6 @@ def word_list_to_freq_dict(wordlist):
     return dict(zip(wordlist, wordfreq))
 
 
-def remove_stopwords(wordlist, stopwords):
-    return [w for w in wordlist if w not in stopwords]
-
-
 def top_submission_to_word_cloud(subreddit_name, number_of_submissions):
     sb_submissions = __get_subreddit_object(subreddit_name).top(limit=number_of_submissions)
     top_submission = []
@@ -56,3 +51,4 @@ print('done')
 # TODO: Add handling of invalid subreddits
 # TODO: Create wordcloud generators for HOT and maybe other types
 # TODO: Create a main where user can input subreddit sort type and sort
+# TODO: Add comments for each function
