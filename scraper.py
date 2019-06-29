@@ -14,6 +14,11 @@ def load_json_file(file):
 
 
 def __get_subreddit_object(subreddit_name):
+    """
+
+    :param subreddit_name:
+    :return:
+    """
     config = load_json_file('config.json')
     reddit = praw.Reddit(client_id=config['clientId'],
                          client_secret=config['clientSecret'],
@@ -41,11 +46,31 @@ def top_submission_to_word_cloud(subreddit_name, number_of_submissions):
     wc.to_file('test.png')
 
 
-top_submission_to_word_cloud('politics', 500)
+def main():
+    number_of_posts_num = 50
+    print("Subreddit to WordCloud Generator")
+    while True:
+        subreddit_name = input("What subreddit would you like a WordCloud of? (Do not include /r/): ")
+        try:
+            sb_submissions = __get_subreddit_object(subreddit_name).top(limit=1)
+        except:
+            print("Not a valid subreddit")
 
-print("--- %s seconds ---" % (time.time() - start_time))
-print('done')
+        number_of_posts = input("How many top posts do you want to use? Max of 1000: ")
+        try:
+            number_of_posts_num = int(number_of_posts)
+        except ValueError:
+            print("Not a valid number")
 
+        if number_of_posts_num <= 0:
+            print('Number is less than zero')
+        else:
+            print(type(number_of_posts_num))
+            print(type(subreddit_name))
+            top_submission_to_word_cloud(subreddit_name, number_of_posts_num)
+            break
+
+main()
 # TODO: Maybe create the wordcloud using a stemmer algorithm
 # TODO: Package the script
 # TODO: Add handling of invalid subreddits
