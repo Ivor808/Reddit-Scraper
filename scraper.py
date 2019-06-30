@@ -72,9 +72,8 @@ def main():
                 top_submission_to_word_cloud(subreddit_name, number_of_posts_num)
             except:
                 print('Not valid subreddit ')
-
     print("--- %s seconds ---" % (time.time() - start_time))
 
 
-main()
-
+#main()
+# TODO: Figure out invalid subreddit handling
