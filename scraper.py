@@ -1,5 +1,4 @@
 import praw
-import time
 from wordcloud import WordCloud
 import json
 import matplotlib
@@ -32,6 +31,18 @@ def __get_subreddit_object(subreddit_name):
     return sb
 
 
+def __check_if_subreddit_exist(subreddit_name):
+    """
+    Checks if the given subreddit name exists
+    :param subreddit_name: The subreddit to check existence of
+    :return: nothing
+    """
+    sb = __get_subreddit_object(subreddit_name).top(limit=1)
+    x = []
+    for submission in sb:
+        x.append(submission.title)
+
+
 def top_submission_to_word_cloud(subreddit_name, number_of_submissions):
     """
     Creates a wordcloud of the top posts from a subreddit and saves it as an image
@@ -48,14 +59,14 @@ def top_submission_to_word_cloud(subreddit_name, number_of_submissions):
     text = " ".join([word for word in top_submission])
     wc = WordCloud()
     wc.generate(text)
-    wc.to_file('test.png')
+    wc.to_file(subreddit_name + '_' + str(number_of_submissions) + '_' + 'wc.png')
 
 
 def main():
-    number_of_posts_num = 50
-    start_time = time.time()
+    number_of_posts_num = 15
     print("Subreddit to WordCloud Generator")
     while True:
+        sub_fail = 0
         subreddit_name = input("What subreddit would you like a WordCloud of? (Do not include /r/): ")
 
         number_of_posts = input("How many top posts do you want to use? Max of 1000: ")
@@ -66,14 +77,21 @@ def main():
 
         if number_of_posts_num <= 0:
             print('Number is less than zero')
+
+        try:
+            __check_if_subreddit_exist(subreddit_name)
+        except:
+            print('Not a valid sub!')
+            sub_fail = 1
+
+        if sub_fail == 0:
+            top_submission_to_word_cloud(subreddit_name, number_of_posts_num)
+        run_again = input('Would you like to run the generator again? type 1 to run again')
+        if run_again == str(1):
+            print('----------------------------------------')
         else:
-
-            try:
-                top_submission_to_word_cloud(subreddit_name, number_of_posts_num)
-            except:
-                print('Not valid subreddit ')
-    print("--- %s seconds ---" % (time.time() - start_time))
+            break
 
 
-#main()
-# TODO: Figure out invalid subreddit handling
+main()
+
